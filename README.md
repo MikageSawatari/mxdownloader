@@ -1,4 +1,4 @@
-# mXD — mikage X Downloader
+# mXD — mXDownloader
 
 **X (Twitter) のいいね・ブックマークしたメディアを自動保存する Windows トレイアプリ。**
 

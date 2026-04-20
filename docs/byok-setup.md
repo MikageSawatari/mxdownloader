@@ -147,23 +147,13 @@ mXD は X API の Pay-Per-Use を使います。2026 年 4 月時点の単価:
 
 ### 5-3. 認証(OAuth 2.0 PKCE)
 
-**この手順は現在のバージョンでは CLI から一度だけ行う必要があります**(Settings からの認証は v0.2 で予定)。
+1. 設定ウィンドウの **「X アカウントで認証」** ボタンを押す
+2. 既定ブラウザが開き、X の認可ページが表示される
+3. 「Authorize app」(または同等)を押して許可
+4. 「Authorization complete.」の画面が出たらブラウザは閉じて OK
+5. 設定ウィンドウに戻り、「認証完了しました。ポーリングを開始します。」と表示されれば成功
 
-```powershell
-# PowerShell で実行
-cd "C:\Program Files\mXD"    # またはインストール先
-# (CLI 版が別途必要。近日 Tray に統合予定)
-```
-
-暫定的な回避策:
-
-1. [https://github.com/MikageSawatari/mxdownloader/releases](https://github.com/MikageSawatari/mxdownloader/releases) から CLI 版を別途ダウンロード
-2. `mXDownloader.Cli.exe --save` を実行
-3. 既定ブラウザが開き X の認可画面が表示される → 許可
-4. localhost にリダイレクトされ「Authorization complete.」が表示
-5. mXD のトレイアプリを再起動(タスクトレイの右クリック → 終了 → 再起動)
-
-> ℹ️ v0.2 で Settings ウィンドウから直接認証できるようにします。それまではこの手順が必要です。
+以降、ポーリング間隔ごと(既定 15 分)に自動で取得が走ります。Client ID を変更した場合は同じボタンで再認証してください。
 
 ---
 
