@@ -2,7 +2,7 @@
 
 **X (Twitter) のいいね・ブックマークしたメディアを自動保存する Windows トレイアプリ。**
 
-> 🧪 **v0.1.0 Beta** — 自分用運用では十分実用できるレベルです。フィードバックは [Issues](https://github.com/MikageSawatari/mxdownloader/issues) へどうぞ。
+> 🧪 **v0.2.0 Beta** — 自分用運用では十分実用できるレベルです。変更履歴は [CHANGELOG.md](CHANGELOG.md)、フィードバックは [Issues](https://github.com/MikageSawatari/mxdownloader/issues) へどうぞ。
 
 ## できること
 

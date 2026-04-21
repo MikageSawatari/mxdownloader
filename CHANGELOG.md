@@ -1,0 +1,60 @@
+# Changelog
+
+All notable changes to mXD. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), dates in JST.
+
+## [v0.2.0-beta] — 2026-04-21
+
+### 大きな変更
+
+- **コスト削減**: 実測で $6/日 が $1〜2/日 まで圧縮できる見込み(利用量による)
+- **初回設定が 1 本道に**: CLI 経由の暫定認証フローを廃止、トレイの設定画面のみで完結
+- **名称を整理**: 「mikage X Downloader」→ **「mXDownloader」** (短縮形「mXD」はそのまま)
+
+### Added(追加)
+
+- 設定画面からの OAuth 2.0 PKCE 認証(「X アカウントで認証」ボタン)
+- 初回起動時に Settings ウィンドウを自動表示(tokens 未設定を検知)
+- 未認証状態の可視化 — 状態ウィンドウに黄色バナー、トレイメニュー / 今すぐ更新ボタンに案内ダイアログ
+- **取りこぼし検知**: ページ上限まで埋まって前回カーソルに到達できなかった場合、ログ記録・バルーン通知・状態ウィンドウにオレンジバナー表示
+- **静音時間帯**(quiet hours): 指定時間帯はポーリング停止(HH:MM-HH:MM、日またぎ対応)。手動更新は常に有効
+
+### Changed(変更)
+
+- 既定ポーリング間隔: 15 分 → **60 分**(取りこぼし検知機能で補完)
+- スレッド検索(search/recent)の条件を絞り込み: **メディア付き かつ 48 時間以内** のツイートのみ対象。テキストのみ like や古いツイートへの無駄検索を削減
+- Client ID 変更時の案内を「再起動してください」から「認証ボタンを押してください」に変更(再起動不要)
+
+### Fixed(修正)
+
+- 多ページ fetch 時、`batch.ReferencedTweets`(引用元マップ)が最後のページ分しか保持されていなかった(1 ページで収まるケースでは顕在化せず)
+
+### Docs
+
+- BYOK セットアップマニュアル更新: CLI 手順削除、新認証フロー、静音時間帯、新しい既定値を反映
+
+---
+
+## [v0.1.0-beta] — 2026-04-20
+
+初回公開ベータ。
+
+### 機能
+
+- システムトレイ常駐 (Windows 10 / 11)
+- OAuth 2.0 PKCE 認証(BYOK: 各ユーザが自分の X API Client ID を使用)
+- いいね・ブックマークの 15 分間隔ポーリング(個別 ON/OFF 可)
+- 引用ツイート・リツイートをいいねした場合、元ツイートの画像も自動保存
+- 漫画スレッドの続編(同一 conversation + 同作者)を自動追跡
+- EXIF / XMP メタデータ埋め込み(`xtw:*` カスタム名前空間 + 標準 `dc:*` + EXIF Artist/ImageDescription/Copyright)
+- SQLite による重複排除
+- 初回バックフィル量選択(100 / 500 / 最大 800 件)
+- Windows 起動時自動開始(レジストリ HKCU Run)
+- 状態ウィンドウ — ローカルログからの使用状況集計(今月/今日のコール数、エンドポイント別、status 別)
+- Inno Setup per-user インストーラ(`%LOCALAPPDATA%\Programs\mXD\`、UAC 不要)
+- self-contained .NET 8 single-file(ランタイム同梱)
+- [mIV (mimageviewer)](https://github.com/MikageSawatari/mimageviewer) 連携
+
+### ライセンス
+
+- 本体: MIT
+- 同梱 ExifTool: GPL / Artistic(詳細は `THIRD_PARTY_NOTICES.md`)
