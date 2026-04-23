@@ -1,69 +1,81 @@
 # mXD — mXDownloader
 
-**X (Twitter) のいいね・ブックマークしたメディアを自動保存する Windows トレイアプリ。**
+**Windows ネイティブな X (Twitter) メディア自動保存トレイアプリ。**
 
-> 🧪 **v0.2.0 Beta** — 自分用運用では十分実用できるレベルです。変更履歴は [CHANGELOG.md](CHANGELOG.md)、フィードバックは [Issues](https://github.com/MikageSawatari/mxdownloader/issues) へどうぞ。
+> ⚠️ **v0.2.1 Beta.** 自分用運用で十分実用的なレベルですが、細部にラフな箇所が残っています。変更履歴は [CHANGELOG.md](CHANGELOG.md)、バグ報告・要望は [公開リポジトリの Issues](https://github.com/MikageSawatari/mxdownloader/issues) へどうぞ。
 
-## できること
+いいね / ブックマークしたツイートのメディア(画像・動画・animated GIF)を、15 分間隔でバックグラウンド取得してローカルに保存します。
 
-- システムトレイに常駐し、15 分間隔で X のいいね・ブックマークを自動取得
-- 画像・動画・アニメ GIF を CDN から直接ダウンロード(画像本体は API 課金外)
-- 投稿者・ツイート URL・本文・投稿時刻を EXIF / XMP メタデータとして埋め込み
-  - [mIV (mimageviewer)](https://github.com/MikageSawatari/mimageviewer) で開くと「元ツイートを開く」「投稿者タイムライン」ボタンが利用可能
-- 引用ツイート・リツイートをいいねした場合、**元ツイートの画像も自動保存**
-- 漫画スレッドの続編(同一会話 + 同作者のリプライ)を自動追跡
-- いいね・ブックマークを個別に ON / OFF(コスト調整用)
+## 主な機能
+
+- システムトレイ常駐(Windows 10 / 11)
+- OAuth 2.0 PKCE 認証(BYOK: 各ユーザが自分の X API Client ID を使用)
+- いいね・ブックマークの差分取得(設定でどちらか片方のみも可)
+- 引用ツイート / リツイートをいいねすると、元ツイートの画像も自動保存
+- 漫画スレッドの続編(同一 conversation / 同じ作者)を自動追跡
+- EXIF / XMP メタデータ埋め込み(ツイート URL・投稿者・本文・投稿日・発見日等)
+- SQLite による重複排除 & 差分カーソル管理
+- ローカル API ログからの使用状況表示
 - Windows 起動時自動開始
-- 初回バックフィル量を選択(100 件 / 500 件 / 最大 800 件)
 
-## ダウンロード
+## ユーザー向け配布
 
-👉 [**最新リリース**](https://github.com/MikageSawatari/mxdownloader/releases/latest)
+バイナリ配布とセットアップマニュアルは公開リポジトリにあります:
 
-`mXDownloader-v*-setup.exe`(約 72 MB)をダウンロードして実行してください。
+👉 **https://github.com/MikageSawatari/mxdownloader**
 
-- **Windows 10 / 11 (64bit)** が必要
-- **.NET 8 Runtime は同梱**(self-contained ビルド)
-- **管理者権限不要**(ユーザーホーム配下 `%LOCALAPPDATA%\Programs\mXD\` に per-user インストール)
-- Windows SmartScreen 警告が出たら「詳細情報」→「実行」で進んでください(コード署名は未対応)
+本リポジトリ(`mxdownloader-src`)は**ソースコード用で非公開**です。
 
-## セットアップ
+## プロジェクト構成
 
-mXD は **BYOK (Bring Your Own Key)** 方式です。各ユーザが自分の X Developer アカウントで Client ID と Pay-Per-Use プランを用意する必要があります。
+```
+src/
+  mXDownloader.Core/   共通ロジック (認証、API、保存パイプライン、メタデータ)
+  mXDownloader.Cli/    コマンドライン版 (開発・検証用)
+  mXDownloader.Tray/   トレイ常駐 WPF アプリ (本体)
+tools/
+  exiftool.exe         メタデータ埋込用 (同梱、GPL/Artistic)
+installer/
+  mXD.iss              Inno Setup 6 スクリプト
+scripts/
+  publish.ps1          self-contained single-file 生成
+  dev-deploy.ps1       開発中の一発再配備(shutdown.flag → publish → copy → 起動)
+  build-release.ps1    publish + Inno Setup で setup.exe 生成
+docs/
+  byok-setup.md        エンドユーザー向けセットアップマニュアル
+  miv-integration.md   mIV 連携仕様
+  miv-feedback-*.md    mIV 側セッションからのフィードバック
+```
 
-詳細手順: **[docs/byok-setup.md](docs/byok-setup.md)**
+## ビルド
 
-## 料金について(重要)
+```powershell
+# 開発ビルド
+dotnet build
 
-X API の Pay-Per-Use 従量課金なので、運用方法次第で月額が大きく変わります。
+# 開発中の動作確認(installed 位置に配備して起動)
+powershell -File scripts\dev-deploy.ps1
 
-| 運用形態 | 月額目安 |
-|---|---|
-| ブックマークのみ + 漫画スレッド検索 OFF | **$5 〜 $15** |
-| いいね + ブックマーク + 漫画スレッド検索 OFF | **$15 〜 $30** |
-| いいね + ブックマーク + 漫画スレッド検索 ON(既定) | **$50 〜 $80** |
+# リリース用インストーラ生成
+powershell -File scripts\build-release.ps1
+```
 
-※ 1 日 20 件ペースのいいね前提の目安です。実際の請求は [console.x.com](https://console.x.com) で確認してください。
+要件:
+- .NET 8 SDK
+- Inno Setup 6 (`winget install JRSoftware.InnoSetup` で入る)
+- `tools/exiftool.exe` が `tools/` 配下に存在すること
 
-**必ず Spending Cap(月額上限)を設定**して想定外の課金を防いでください。詳細は [セットアップマニュアル](docs/byok-setup.md) の「ステップ 3-2」を参照。
+## ユーザーデータ配置
 
-## スクリーンショット
-
-作成中です。
+- 設定・認証トークン・DB: `%LOCALAPPDATA%\mXDownloader\`
+- 実行バイナリ: `%LOCALAPPDATA%\Programs\mXD\`
+- 保存先の既定: `%USERPROFILE%\mXD\`(Settings で変更可能)
 
 ## ライセンス
 
-- mXD 本体: **MIT License**([LICENSE](LICENSE))
-- 同梱する ExifTool バイナリ: GPL / Artistic のデュアルライセンス(詳細は [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md))
-
-## ソースコード
-
-ソースは非公開リポジトリで管理しています。Issue や機能要望は**本リポジトリの [Issues](https://github.com/MikageSawatari/mxdownloader/issues)** で受け付けています。
+- mXD 本体: **MIT License**([LICENSE](LICENSE) 参照)
+- 同梱サードパーティ: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 参照
 
 ## 関連プロジェクト
 
-- [mIV (mimageviewer)](https://github.com/MikageSawatari/mimageviewer) — mXD と連携する高速 Windows 11 画像ビューア。mXD が保存したファイルの XMP メタデータを読み、元ツイートへのリンクをワンクリックで開けます
-
-## 作者
-
-Mikage Sawatari ([@mikage](https://x.com/mikage))
+- [mIV (mimageviewer)](https://github.com/MikageSawatari/mimageviewer) — 連携相手の高速 Windows 11 画像ビューア。mXD が書き込む XMP `xtw:*` を読んで「元ツイートを開く」等のボタンを提供
