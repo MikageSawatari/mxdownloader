@@ -2,6 +2,18 @@
 
 All notable changes to mXD. Format loosely follows [Keep a Changelog](https://keepachangelog.com/), dates in JST.
 
+## [v0.2.1-beta] — 2026-04-23
+
+### Changed(変更)
+
+- **スレッド検索フィルタ短縮**: `search/recent` の対象ツイート年齢上限を **48h → 24h** に。実測データから ~92% のスレッドは 24h 以内に完結しているため、search 呼び出し数を概ね半減。`$0.3〜0.5/日` の API コスト削減見込み
+  - 24h を超えて続く連投スレッド(例: 数日に渡るシリーズもの)は末尾の取りこぼしが発生する可能性あり。大多数のケースでは影響なし
+
+### Notes(備考)
+
+- X API の `liked_tweets` / `bookmarks` は公式に `since_id` パラメータ非対応 のため、UTC 日またぎの重複課金(~100 Posts/日)は構造的に回避不可能
+- X API Pay-Per-Use の **Owned Reads pricing ($0.001/Post)** は 2026-04-20 から段階的にロールアウト中。完全適用されると本アプリの API コストは現状の 1/5 程度まで低下する見込み
+
 ## [v0.2.0-beta] — 2026-04-21
 
 ### 大きな変更
