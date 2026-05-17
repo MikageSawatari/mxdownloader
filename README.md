@@ -4,7 +4,7 @@
 
 > ⚠️ **v0.2.2 Beta.** 自分用運用で十分実用的なレベルですが、細部にラフな箇所が残っています。変更履歴は [CHANGELOG.md](CHANGELOG.md)、バグ報告・要望は [公開リポジトリの Issues](https://github.com/MikageSawatari/mxdownloader/issues) へどうぞ。
 
-いいね / ブックマークしたツイートのメディア(画像・動画・animated GIF)を、15 分間隔でバックグラウンド取得してローカルに保存します。
+いいね / ブックマークしたツイートのメディア(画像・動画・animated GIF)を、60 分間隔(設定で変更可)でバックグラウンド取得してローカルに保存します。
 
 ## 主な機能
 
@@ -18,13 +18,13 @@
 - ローカル API ログからの使用状況表示
 - Windows 起動時自動開始
 
-## ユーザー向け配布
+## ダウンロード & インストール
 
-バイナリ配布とセットアップマニュアルは公開リポジトリにあります:
+最新インストーラを Releases からダウンロードして実行するだけです(管理者権限不要・ユーザーローカルインストール):
 
-👉 **https://github.com/MikageSawatari/mxdownloader**
+👉 **https://github.com/MikageSawatari/mxdownloader/releases/latest**
 
-本リポジトリ(`mxdownloader-src`)は**ソースコード用で非公開**です。
+初回セットアップ手順(X API Client ID の取得・認証)は [docs/byok-setup.md](docs/byok-setup.md) を参照してください。
 
 ## プロジェクト構成
 
