@@ -2,7 +2,7 @@
 
 **Windows ネイティブな X (Twitter) メディア自動保存トレイアプリ。**
 
-> ⚠️ **v0.2.2 Beta.** 自分用運用で十分実用的なレベルですが、細部にラフな箇所が残っています。変更履歴は [CHANGELOG.md](CHANGELOG.md)、バグ報告・要望は [公開リポジトリの Issues](https://github.com/MikageSawatari/mxdownloader/issues) へどうぞ。
+> ⚠️ **v0.2.3 Beta.** 自分用運用で十分実用的なレベルですが、細部にラフな箇所が残っています。変更履歴は [CHANGELOG.md](CHANGELOG.md)、バグ報告・要望は [公開リポジトリの Issues](https://github.com/MikageSawatari/mxdownloader/issues) へどうぞ。
 
 いいね / ブックマークしたツイートのメディア(画像・動画・animated GIF)を、60 分間隔(設定で変更可)でバックグラウンド取得してローカルに保存します。
 
